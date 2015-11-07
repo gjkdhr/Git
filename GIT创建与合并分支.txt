@@ -1,0 +1,73 @@
+默认情况下，git在活动目录下，用主分支master
+维护着下面的文件代码管理。
+这种单一的模式，只适合个人对文件代码的修改，提交并推送。
+
+在实际项目开发时，如果只有单一的主分支，多人进行文件代码修改的话，
+会造成错乱，以至于文件经常发生修改冲突。
+
+引入多分支模式，可以有效解决这种问题，
+最经典的案例就是，假设现在项目组有一个程序代码需要小组成员来完成，
+代码的现在主要由项目负责人在主分支master上完成。
+现在代码中有多个函数模块需要完成，比如有函数function1(),function2()
+和function3()三个函数。现在需要三个程序员a,b,c来完成。
+那最好的方式就是a,b,c三个程序员各自完成一个函数function1(),function2()
+和function3()
+
+现在每个人就可以切换到自己的分支下对代码进行修改添加了。
+假如a现在完成了代码并且也通过了测试，于是现在将代码add,并commit。
+
+告诉项目负责人我把代码撸完了，项目负责人经过测试，嗯，还行。现在他就可以对代码进行合并merge操作了。
+
+显示当前活动目录下的所有分支，以及现在所处的分支。
+git branch
+
+创建分支,比如我们先创建一个develop1分支
+git branch develop1
+现在我想切换到develop1分支上。
+git checkout develop1
+
+如果你不确定，那就在瞅一眼
+git branch 
+
+
+现在比如说你在develop1分支下改代码，当你改好了之后。
+就可以提交了。
+vi test.sh
+git add test.sh
+git commit -m "description" 
+
+
+现在如果master就可以合并你的代码了。
+对，前提是master从你在develop分支下进行代码修改的过程中未动过。
+如果动了的话，就是master修改了代码，develop分支也修改了代码。
+这样在合并的时候会发生冲突的。后面会提到。
+
+这种合并通过git merge就可以进行。
+git merge branch_name
+[root@wdhwdh git]# git push origin master
+Counting objects: 4, done.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 767 bytes, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To git@github.com:gjkdhr/git.git
+   93a8917..d241f1a  master -> master
+
+
+如果你在代码任务完成之后，想删除某个分支
+git branch -d branch_name
+
+
+
+解决冲突
+当我们在分支上对代码进行了修改，如果在develop分支修改期间，master没有对代码文件进行修改
+就能够进行正常的合并。
+但是如果在这期间，master分支也对代码进行了改动这样的话，合并的时候就会造成冲突。
+
+我们来看一下，假设现在develop分支修改了test.txt文件。
+在这期间，master主分支，也对test.txt 进行了改动。
+
+
+
+
+
+
