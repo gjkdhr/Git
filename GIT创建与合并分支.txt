@@ -66,8 +66,70 @@ git branch -d branch_name
 我们来看一下，假设现在develop分支修改了test.txt文件。
 在这期间，master主分支，也对test.txt 进行了改动。
 
+根据测试，
+如果master修分支和develop分支修改的不是一处地方的话，一般不会发生冲突。
+但是如果修改的是一处相同的内容，就会造成冲突。
+
+你看，我们修改的不同，在合并的时候，就发生了冲突。
+[root@wdhwdh git]# git merge develop
+Auto-merging test.txt
+CONFLICT (content): Merge conflict in test.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+发生这种情况，一般需要手动去修改冲突的地方。
+[root@wdhwdh git]# cat test.txt 
+gjkdhr
+hehe
+add the master branch
+book
+Tue Nov 17 21:36:53 CST 2015
+<<<<<<< HEAD
+second add the branch develop
+haha
+=======
+
+first add the branch develop
+hehe
+>>>>>>> develop
+
+
+<<<<<<< HEAD   表示master分支和develop分支修改文件，不同内容开始的地方。
+
+========             以上表示在master分支中修改的内容。
+
+>>>>>>>> develop    以上，==以下。表示develop分支对文件修改的内容。
 
 
 
+合并的话，按照你的需求。
+合并之后，其实就是对文件的修改。
+只需要再次add并commit就可以了。
+[root@wdhwdh git]# cat test.txt 
+gjkdhr
+hehe
+add the master branch
+book
+Tue Nov 17 21:36:53 CST 2015
+second add the branch develop
+haha
+first add the branch develop
+hehe
+[root@wdhwdh git]# git add test.txt 
+[root@wdhwdh git]# git commit -m "merge the modify"
+
+用git log添加参数--graph就可以查看图形化的合并图了。
+[root@wdhwdh git]# git log --graph --pretty=oneline --abbrev-commit 
+*   aad0dc9 merge the modify
+|\  
+| * 7b371c1 xiugai
+* | db41323 add the new branch
+* | 4c73913 modify
+* | 5d3776e tijiao
+* |   cd4bdcc Merge branch 'develop'
+|\ \  
+| |/  
+....
+...
+..
 
 
