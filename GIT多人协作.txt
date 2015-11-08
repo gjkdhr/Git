@@ -1,0 +1,143 @@
+当你从远程仓库克隆时，实际上git自动把本地的master分支
+和远程的master分支对应起来。并且远程仓库默认名称是origin。
+要查看远程库的信息，用git remote
+[root@wdhwdh git]# git remote
+origin
+
+或者用-v参数显示更详细的信息。
+git remote -v
+[root@wdhwdh git]# git remote -v
+origin	git@github.com:gjkdhr/git.git (fetch)
+origin	git@github.com:gjkdhr/git.git (push)
+上面显示了可以抓取和推送的origin的地址，如果没有推送权限，就看不到push的地址。
+
+
+推送分支
+就是把该分支上的所有本地提交推送到github或者git服务器。
+在推送时，要指定本地分支，这样，git就会把该分支推送到
+github或者git服务器对应的远程分支上，
+
+例如我们将master主分支推送到远程库中。
+git push origin master
+
+如果要推送其他分支，只需要明确推送的分支名就可以了。
+git push origin branch_name
+
+
+
+但是，并不是一定要把本地分支往远程推送，那么，哪些分支需要推送，哪些不需要呢？
+
+master分支是主分支，因此要时刻与远程同步；
+dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
+
+
+抓取分支
+多人协作时，大家都会往master和develop分支上推送各自的修改。
+
+假如现在一个同事在另一台电脑（把SSH Key添加到GitHub）
+他从github上克隆了项目
+
+首先他查看分支的时候，肯定只会有主分支。
+[root@wdhwdh git]# git remote
+origin
+获取本地很远端github上的所有分支
+[root@wdhwdh git]# git branch -av
+  bug-110                bdfafd4 fix the bug
+* feature                6d52d6c create git_bug_branch method
+  master                 d33fe5c create the feature branch
+  remotes/origin/HEAD    -> origin/master
+  remotes/origin/bug-110 bdfafd4 fix the bug
+  remotes/origin/feature 6d52d6c create git_bug_branch method
+  remotes/origin/master  d33fe5c create the feature branch
+
+
+现在他准备在feature分支上进行开发，所以他要获取github上
+feature分支，并将github上的develop分支跟关联到本地
+git checkout -b feature origin/feature
+
+所谓-b选项的含义，man文档给出是这样的
+Create a new branch named <new_branch> and start it at <start_point>
+后面的origin/feature就是关联github上的
+
+
+也可以分步骤来完成本地分支创建并关联。
+1，首先在查看了远程github上的分之后，创建一个将要工作的本地分支(与远程github相同的分支)
+git branch branch_name
+2，将本地这个分支与github上的分支关联起来。
+使用git branch --set-upstream branch-name origin/branch-name
+
+
+
+现在他就可以在feature分支下编写修改代码了，测试完之后，就可以add并commit了。
+之后再把分支信息提交到github上,因为他是在feature
+git push origin feature
+[root@wdhwdh git]# git push origin feature
+Counting objects: 5, done.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 314 bytes, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@github.com:gjkdhr/git.git
+   6d52d6c..f5ae0c2  feature -> feature
+
+
+
+当他向origin/dev分支上推送了他的提交之后，
+而这边你也正好在develop上实现了另外的功能，对代码做了修改。并试图推送。
+[root@wdhwdh git]# git push origin feature
+To git@github.com:gjkdhr/git.git
+ ! [rejected]        feature -> feature (non-fast-forward)
+error: failed to push some refs to 'git@github.com:gjkdhr/git.git'
+To prevent you from losing history, non-fast-forward updates were rejected
+Merge the remote changes before pushing again.  See the 'Note about
+fast-forwards' section of 'git push --help' for details.
+
+卧槽，出错了。
+原来是你的同事他修改了github上的代码文件。而你此时再次推送，和他的发生了冲突。
+解决的方法也很简单，我们只需把同事修改文件最新的提交pull下来
+[root@wdhwdh git]# git pull
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 2), reused 3 (delta 2), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:gjkdhr/git
+   6d52d6c..f5ae0c2  feature    -> origin/feature
+Auto-merging test.txt
+Merge made by recursive.
+ test.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+pull下载最新的文件，并进行了自动合并的操作，也就是将同事的修改和我的修改
+自动合并到一个文件。
+
+如果我跟同事共同修改了某一部分，还会发生冲突。
+需要手动合并并解决冲突后，再次push
+
+
+
+
+
+因此，多人协作的工作模式通常是这样：
+1，首先，可以试图用git push origin branch-name推送自己的修改；
+2，如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+3，如果合并有冲突，则解决冲突，并在本地提交；
+4，没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
