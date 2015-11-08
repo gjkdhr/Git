@@ -1,0 +1,133 @@
+一般我们发布一个新版本到线上服务器时都会在版本库中打一个标签，
+这时就确定了某个版本将发布到线上。
+我们可以随时可以查看这个打标签的版本，
+也就是说标签其实呢，就是版本库中一个快照。
+简单说标签就是指向某个commit的打针与我们前面讲的分支的点类似
+但区别是分支是可变的而标签是不可变。
+所以，我们创建与删除标签都非常的快。
+
+在Git中打标签非常简单，首先，切换到需要打标签的分支上：
+git tag <name>就可以打一个新标签
+[root@wdhwdh git]# git tag V1.0
+[root@wdhwdh git]# git tag
+V1.0
+我们这里打的标签提交到最新的commit上
+
+有时候我们想给前面某个commit描述的提交打个标签，
+该如何操作呢/
+
+首先得获取commit提交的描述，找到需要提交的commit描述
+[root@wdhwdh git]# git log --pretty=oneline --graph --abbrev-commit
+* d33fe5c create the feature branch
+* ade5e76 create feature branch
+* 51fadcb create git_bug branch
+*   96da357 second fix the test.txt
+|\  
+| * bdfafd4 fix the bug
+* |   54ca23f tian jia initiatorname.iscsi
+|\ \  
+| * | 3fd1dd4 xuyao xiufu master bug
+* | |   103f0f1 hebing bug-110 fix the bug
+|\ \ \  
+| | |/  
+| |/|   
+
+加入我们现在想给commit描述为"second fix the test.txt"的commit id打标签
+那么只需要将在标签版本后面加上id号就行了
+[root@wdhwdh git]# git tag V0.9 96da357
+[root@wdhwdh git]# git tag
+V0.9
+V1.0
+这样查看标签，是不是没头绪，应为你不知道标签版本对应着那个commit提交？
+那你可以直接show这个标签，查看这个标签的详细情况。
+[root@wdhwdh git]# git show V0.9
+commit 96da357d54e01edfea370d27b28e93487af8009b
+Merge: 54ca23f bdfafd4
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Wed Nov 18 21:31:19 2015 +0800
+
+    second fix the test.txt
+
+diff --cc test.txt
+index 33c3778,6ff7c34..d9c0ab7
+--- a/test.txt
++++ b/test.txt
+@@@ -1,6 -1,7 +1,7 @@@
+  gjkdhr
+  gjkdhr@162.com
+ -book
+ -this is the bug-110 add the line
+ -Tue Nov 17 21:36:53 CST 2015
+  second add the branch develop
+
+
+当然，还可以常见更加详细的标签
+用-a指定标签名，-m指定说明文字：
+[root@wdhwdh git]# git show V0.88
+tag V0.88
+Tagger: gjkdhr <gjkdhr@163.com>
+Date:   Sun Nov 8 09:24:18 2015 +0800
+
+git_bug first modify
+
+commit 51fadcb06232f887bdc57669c1c83491ab8de6f5
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Wed Nov 18 23:23:05 2015 +0800
+
+    create git_bug branch
+
+
+
+如果标签打错了，也是可以删除的
+因为创建的标签都只存储在本地，不会自动推送到远程。
+所以，打错的标签可以在本地安全删除。
+[root@wdhwdh git]# git tag
+V0.88
+V0.9
+V1.0
+[root@wdhwdh git]# git tag -d V1.0
+Deleted tag 'V1.0' (was d33fe5c)
+[root@wdhwdh git]# git tag
+V0.88
+V0.9
+
+
+
+如果要推送某个标签到远程，使用命令git push origin <tagname>
+[root@wdhwdh git]# git push origin V0.88
+Counting objects: 1, done.
+Writing objects: 100% (1/1), 163 bytes, done.
+Total 1 (delta 0), reused 0 (delta 0)
+To git@github.com:gjkdhr/git.git
+ * [new tag]         V0.88 -> V0.88
+
+
+也一次性推送全部尚未推送到远程的本地标签
+[root@wdhwdh git]# git push origin --tags
+Total 0 (delta 0), reused 0 (delta 0)
+To git@github.com:gjkdhr/git.git
+ * [new tag]         V0.9 -> V0.9
+
+
+如果想从github或者git服务器上删除标签 也是可以的。
+用push命令就好了，格式如下：
+[root@wdhwdh git]# git push origin :refs/tags/v0.9
+To git@github.com:gjkdhr/git.git
+ - [deleted]         v0.9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
