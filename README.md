@@ -1,29 +1,26 @@
-usage: git [--version] [--exec-path[=GIT_EXEC_PATH]] [--html-path]
-           [-p|--paginate|--no-pager] [--no-replace-objects]
-           [--bare] [--git-dir=GIT_DIR] [--work-tree=GIT_WORK_TREE]
-           [--help] COMMAND [ARGS]
+这是一个关于git相关概念以及操作的文件夹。
+由于前段时间开始写shell脚本，在公司的时候将代码写完，并不断地运行，改bug。
+然后将代码拷贝出来，然后放在百度云里。
+回到家里，又把代码从百度云里down下来，然后又将代码传到linux虚拟机中，进行代码编写。
+这样反复无常的折腾，让我想起了git，
+最初只是在github上star了一些好的代码来学习参考。
 
-The most commonly used git commands are:
-   add        Add file contents to the index
-   bisect     Find by binary search the change that introduced a bug
-   branch     List, create, or delete branches
-   checkout   Checkout a branch or paths to the working tree
-   clone      Clone a repository into a new directory
-   commit     Record changes to the repository
-   diff       Show changes between commits, commit and working tree, etc
-   fetch      Download objects and refs from another repository
-   grep       Print lines matching a pattern
-   init       Create an empty git repository or reinitialize an existing one
-   log        Show commit logs
-   merge      Join two or more development histories together
-   mv         Move or rename a file, a directory, or a symlink
-   pull       Fetch from and merge with another repository or a local branch
-   push       Update remote refs along with associated objects
-   rebase     Forward-port local commits to the updated upstream head
-   reset      Reset current HEAD to the specified state
-   rm         Remove files from the working tree and from the index
-   show       Show various types of objects
-   status     Show the working tree status
-   tag        Create, list, delete or verify a tag object signed with GPG
+当遇到了git之后，我甚是高兴纳。
+里面都是我学习git基本的东西，操作的命令还是很简单明了的。
+主要重点和难点在git的分支上面。重在理解。
 
-See 'git help COMMAND' for more information on a specific command.
+git解决了我很多问题，它还有很多优点令人赞不绝口。
+首先我只需要将我公司的linux主机，和我家里的linux虚拟机里面ssh生成的公钥id_rsa.pub
+添加到github的账号中，这样我在公司修改完代码，或者还没有完成时。
+我直接add并commit，然后push到github上。
+然后我回到家里想继续的话，一个pull就可以更新我的git库。
+
+其次git强大的日志和时光穿梭功能，经常修改代码，难免会添加或者删除一些重要的代码，
+可以用commit做个描述。并且分支里记录了我所有commit的描述，如果我现在后悔了修改，
+我可以随时穿越回到某个版本。没办法，分支就是这么强大。
+
+当然github也有不足的地方，
+第一个没有中文界面，而且网页有时刷新很慢。并且用户上传的代码的属于public的，
+当然土豪可以花钱变为previate。所以这上面只适合放一些自己研究的东西，千万不要泄密哦。
+第二github分支固然强大，但是在权限管理上，我觉得还做得不够好。
+也有人说，git开源的，所以无外乎关注权限。在于share。
