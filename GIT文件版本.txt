@@ -1,0 +1,176 @@
+1,利用git status及时有效的查看当前活动目录下的文件的状态，
+假设我当前有一个文件
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+book
+
+经过多次修改
+[root@test1 git]# cat test.txt 
+gjkdhr
+add the new line.
+book
+
+每一次对文件的修改，都需要对文件进行加入并提交。
+因为git监控着加入文件的行变化，如果该文件发生变化，就需要对文件重新加入并提交
+每一次的commit最好能说明这次修改对文件都进行了哪些改动。
+
+
+
+2,在文件或代码修改了之后尚未提交的时候，可以通过git diff 来查看文件的变化。
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 3 commits.
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   test.txt
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+查看修改前后文件发生的变化
+[root@test1 git]# git diff test.txt 
+diff --git a/test.txt b/test.txt 
+index b37fbfb..d96c7d4 100644 
+--- a/test.txt  
++++ b/test.txt  
+@@ -1,3 +1,4 @@    表示删除1~3行，添加了1~4行。
+-gjkdhr		表示该行已被删除
+ add the new line.
+ book
++hehe   表示该行是新增行
+
+3,git log file来查看指定文件的提交记录。
+假设我们的文件经过多次修改，现在我想退回到原来的某个文件描述的状态。
+该如何进行呢？
+
+我们在对文件进行多次修改后，每一次文件的变动，我们都用文件描述符记录下了每次修改的细节。
+如何查看呢？
+我们用git log 来查看当前文件的我们的提交记录。
+[root@test1 git]# git log test.txt 
+commit c4ee4479d6d80a0d4d6d508c029a53b673a6de44
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Tue Nov 17 20:09:37 2015 +0800
+
+    seconds add the new line
+
+commit ac0320a1d60b2381d55a9fe02a448c6446d2971f		提交的id码
+Author: gjkdhr <gjkdhr@163.com>				提交人
+Date:   Tue Nov 17 19:54:48 2015 +0800			提交日期
+
+    delete hehe line		提交描述
+
+commit 9838a46484cb96676e5927870d016baae3b4fe5d
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Tue Nov 17 19:54:16 2015 +0800
+
+    jiaohuan book line
+
+commit d1cf8e7136aa9a61a62a316a2cefd213df768a36
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Tue Nov 17 19:53:36 2015 +0800
+
+    add the new line
+
+commit 2007167d1909d2f07029ef05aeb6078650c1b043
+Author: gjkdhr <gjkdhr@163.com>
+Date:   Tue Nov 17 19:48:19 2015 +0800
+
+    create test file
+
+如果你觉得这样看的话比较麻烦，比较长。
+我们可以只打印提交的id吗。
+[root@test1 git]# git log --pretty=oneline test.txt 
+c4ee4479d6d80a0d4d6d508c029a53b673a6de44 seconds add the new line
+ac0320a1d60b2381d55a9fe02a448c6446d2971f delete hehe line
+9838a46484cb96676e5927870d016baae3b4fe5d jiaohuan book line
+d1cf8e7136aa9a61a62a316a2cefd213df768a36 add the new line
+2007167d1909d2f07029ef05aeb6078650c1b043 create test file
+
+
+
+假如我们现在需要对文件进行回退操作。就是要退会到之前的某个版本，
+该如何做呢？
+git默认会将每次的提交生成唯一的id码。
+
+那么问题来了，如何知道我当前在那一个提交状态呢？
+可以使用git reset --hard HEAD ,可以打印当前所处的提交状态
+[root@test1 git]# git reset --hard HEAD
+HEAD is now at c4ee447 seconds add the new line
+HEAD表示当前的状态，
+HEAD^表示当前状态的前一个状态
+HEAD^^表示当前状态的前两个状态
+依次类推
+
+当我们要回退的状态有点长的时候，可以使用 提交id码来代替
+如果你嫌提交id码有点长，没关系啊。我们可以通过--abbver-commit来只打印提交id码的前几个字符就可以了。
+[root@test1 git]# git log --pretty=oneline --abbrev-commit test.txt 
+c4ee447 seconds add the new line
+ac0320a delete hehe line
+9838a46 jiaohuan book line
+d1cf8e7 add the new line
+2007167 create test file
+
+
+现在只要确定你要回退到那一次提交，就可以了
+假设我们现在回退到上一次的状态。
+[root@test1 git]# git reset --hard HEAD
+HEAD is now at c4ee447 seconds add the new line
+[root@test1 git]# git reset --hard HEAD^
+HEAD is now at ac0320a delete hehe line
+[root@test1 git]# git reset --hard HEAD
+HEAD is now at ac0320a delete hehe line
+看到了吧，你已经回退到上一个版本了。
+
+
+比如我们现在想回退到 "jiaohuan book line"的文件状态
+只要将该提交描述前面的码记住就行了。
+[root@test1 git]# git reset --hard 9838a46
+HEAD is now at 9838a46 jiaohuan book line
+现在文件也变为提交描述时的状态了。
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+add the new line.
+book
+
+4，查看所有回退和向后跳转的版本记录git reflog show file
+现在出现这种情况。当你回退之后，再次git log查看日志记录。
+发现之后的提交id都消失了，这个时候你也就急了。
+比如你只是想看一下之前某一个提交状态代码里的某个代码段，
+现在还要回到最后一次提交的状态。但是很不幸，终端关了，你回家了。
+第二天来你找不到之前的提交状态怎么办？卧槽，拿到回不到未来了吗？
+
+
+
+没事，git 提供对所有版本穿梭过程的日志记录。
+[root@test1 git]# git reflog test.txt 
+usage: git reflog [ show | expire | delete ]
+[root@test1 git]# git reflog show test.txt 
+9838a46 HEAD@{0}: 9838a46: updating HEAD
+ac0320a HEAD@{1}: HEAD^: updating HEAD
+c4ee447 HEAD@{2}: commit: seconds add the new line
+ac0320a HEAD@{3}: commit: delete hehe line
+9838a46 HEAD@{4}: commit: jiaohuan book line
+d1cf8e7 HEAD@{5}: commit: add the new line
+2007167 HEAD@{6}: commit: create test file
+
+你看，每次提交的描述id和对应的描述字段都还存在。所以你想回退或者向后跳转到某个文件版本都是可以的。
+git reset --hard commit_id 就可以了。
+
+
+
+
+
+
+
+
+
+
+
+
+看到了吧，
+
+
