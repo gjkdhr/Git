@@ -162,15 +162,3 @@ git reset --hard commit_id 就可以了。
 
 
 
-
-
-
-
-
-
-
-
-
-看到了吧，
-
-
