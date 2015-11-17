@@ -1,0 +1,55 @@
+1,现在我们搭建一个github的远程仓库
+我们就在test2.zbit.com 上搭建吧。
+
+首先在linux下创建秘钥对
+[root@test2 ~]# ssh-keygen -t rsa -C "test2.zbit.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+8b:82:bc:c5:6e:b3:5f:31:07:83:3b:7e:fb:e7:89:e2 test2.zbit.com
+The key's randomart image is:
++--[ RSA 2048]----+
+|                 |
+|       .         |
+|      . o        |
+|       . o       |
+|      o S .      |
+| . o . o =       |
+|  o + o +        |
+|   +o. o.. ...   |
+|  ..o+..Eoooo    |
++-----------------+
+
+
+然后复制id_rsa.pub中的公钥并添加到github中
+ cat .ssh/id_rsa.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAy4tN8PNuksC+aEs9dqVKnALGId/wVLlItg55TdLI7qVL2+n5Snl0TFYBoe4DTlPzIeCDa79AV9Z1KD+hYtIgwQxE5mig0ujEnDgdofHB8Z2ZTfrz/0ub8nbLL0MDkASZH2QBqz+uPelYA7rjUv+XaOyZ1UChtw+S7wqPsTLi4GCVd7dAl5ijg08G3htNgM4yBiuFodiSnyt7MunmVCiXAbQDkM7buDKPDK2RjWS7H8zW6YkIOZ5bqY0wjd8Xt3upqoMiDCYoAXtkG1mzZ9B8xMlnrOeYcRLUXd2RD1lsEfk0HOGAcIoRMt+h0mXrTlL6/ojezJtR4TsFr+kZvIjNMw== test2.zbit.com
+
+注册一个github账号，并登陆
+在settings设置中点击SSH keys
+
+添加公钥
+一般可能我们在家里和办公室都需要对该文件进行修改，
+这样就可以向github添加多个公钥，然后就可以向github上推送文件或者代码的修改了。
+
+提示：
+	github上托管的git仓库，任何人都可以看见的，
+不要把一些敏感的或者涉及公司机密的文件或者代码放在上面。以防不测发生。
+
+
+如果你不想别人看见你托管的git仓库。有两种方法：
+	1，当然是向github充值，将仓库变为私有的。(别人不可读也不可写)
+	2，自己动手搭建一个公司内部的git服务器，可以只允许自己进行代码或文件的提交。
+也可以允许小组其他成员进行开发和修改。
+
+
+
+
+
+
+
+
