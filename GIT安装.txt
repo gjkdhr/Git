@@ -1,0 +1,83 @@
+1,git的安装很简单
+在centos下采用yum安装
+yum install git -y
+安装包git相当于我们在本地安装了git的客户端和服务端
+关于服务端(既我们自己搭建一套内部的git服务器，防止代码泄露.)
+的搭建，我们会在后面讲到。
+
+
+2,创建工作目录
+git不可能无缘无故的管理所有目录和文件，
+所以我们要创建一个工作目录，来让git管理。
+在工作目录下，我们存放自己的代码和文件，并将其上传到git服务器上。
+
+现在假设我们的工作目录是learngit，我们切换到该目录下
+然后进行初始化
+git init 
+Initialized empty Git repository in /mnt/learngit/.git/
+
+提示我们已经创建好了一个空的活动目录，但是下面会有一个.git/的目录
+该目录下存放着一些原始配置数据，以及缓存区，和master主分支等相关文件信息
+一般不建议对该目录下的文件进行修改。
+如果你现在要使该目录脱离git的管理，直接把该目录下的./git目录给删除掉。
+
+
+3，向git的该目录下添加文件
+一般情况下，我们需要将创建的代码上传到github或者自己搭建的内网git服务器上
+我们会将其他目录的代码或者文件复制到该目录下，或者在该目录下创建并编写代码。
+
+假设我们现在在该目录下有文件install.log
+[root@CentOS6 learngit]# ls
+install.log
+[root@CentOS6 learngit]# git status  查看活动目录下的文件状态
+# On branch master	在主分支上，显示当前文件在主分支上。
+#
+# Initial commit	
+#
+# Untracked files:	未跟踪的文件，意思是该文件还没有被活动目录所识别。
+#   (use "git add <file>..." to include in what will be committed)	提示利用git add file 将该文件加入到git管理
+#
+#	install.log	文件名
+nothing added to commit but untracked files present (use "git add" to track)	没有加入的文件，
+
+
+
+下面我们进行加入，并提交该文件
+
+git add install.log
+[root@CentOS6 learngit]# git status
+# On branch master
+# Changes to be committed: 文件已经被加入，并将要被提交
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   install.log 	显示将要提交的文件
+#
+
+使用git commit 提交就好了， -m 参数指定提交的描述信息。
+git commit -m "add the new file install.log" 
+[master d9ebf85] second config
+ Committer: root <root@CentOS6.(none)>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+If the identity used for this commit is wrong, you can fix it with:
+
+    git commit --amend --author='Your Name <you@example.com>'
+
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+在首次提交的时候，git会自动配置你的用户名和联系邮箱。默认为用户名和你的主机名
+当然你也可以自己设置，
+git config --global user.name "Your Name"
+git config --global user.email you@example.com
+
+这种git config 就是用来设置git的
+当然你也可以设置颜色，用来更直观的显示一些基本操作的打印信息。
+git config --global color.ui true
+
+下面还提示如果出现配置信息错误，可以修改
+git commit --amend --author='Your Name <you@example.com>'
