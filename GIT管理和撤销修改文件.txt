@@ -1,0 +1,202 @@
+1,工作区
+工作区其实就是我们的活动目录。
+在活动目录下面有一个./git 目录，该目录就是活动目录下面的版本库。
+其中包括文件的日志以及提交的描述，包括分支，标签信息，都回保存在该目录下。
+[root@test1 git]# ls .git/
+branches  COMMIT_EDITMSG  config  description  FETCH_HEAD  HEAD  
+hooks  index  info  logs  objects  ORIG_HEAD  refs
+
+在实际的操作过程中是这样的。
+我们在活动目录下对文件或者代码进行修改，
+最后修改完成后对文件进行add操作，实际上就是将该文件放在./git下的称为stage(或者叫index)的暂存区
+git为该文件自动创建第一个分支master，以及指向master的一个指针HEAD。
+详见图版本库1.
+
+第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+
+暂存区就是来确定你修改了哪些文件吧，修改过的文件放置到暂存区。
+等确定完哪些需要提交之后，再在暂存区一次性commit到分支里面。
+如果经常进行文件的修改操作，还是建议多看看当前活动目录的状态，利用git status 
+
+
+
+2，管理修改
+其实git跟踪管理的时文件的修改，而不是文件。
+什么是文件的修改？
+比如你新增了一行，这就是一个修改，删除了一行，也是一个修改，更改了某些字符，
+也是一个修改，删了一些又加了一些，也是一个修改，甚至创建一个新文件，也算一个修改。
+
+我们来看看到底是不是这么回事？
+
+现在我们有文件test.txt
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+add the new line.
+book
+
+对文件进行第一次修改，并将文件加入暂存区。
+[root@test1 git]# echo "`date`" >> test.txt 
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+add the new line.
+book
+Tue Nov 17 21:31:14 CST 2015
+[root@test1 git]# git add test.txt 
+
+现在我们对文件进行第二次修改，但是不提交。
+[root@test1 git]# echo "add the second line" >> test.txt 
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+add the new line.
+book
+Tue Nov 17 21:31:14 CST 2015
+add the second line
+
+当前状态是这样的，显示一个加入了缓存区，一个还没有。
+[root@test1 git]# git status
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   test.txt
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   test.txt
+
+
+现在我们提交
+如果一次提交可以将文件的多次修改提交成功，表示git是对文件进行操作的。
+如果一次提交后，还会显示test.txt文件的第二次修改还没有加入，表示git跟踪管理的时文件的修改，并非文件
+[master 809b85a] add the new line agin
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   test.txt
+
+看到了吧，说明git还是基于跟踪文件的修改进行操作的。
+因为第一次的修改，我们add到缓存区，
+但是第二次修改，我们没有add到缓存区，
+git commit 提交的时候，只是将缓存区的文件修改提交到master主分支上。
+但是第二次修改，由于未add加入缓存区，所以第二次就没有提交成功。
+
+
+
+查看当前的修改与版本库中最新版本文件的区别
+git diff HEAD -- test.txt
+
+[root@test1 git]# git diff HEAD -- test.txt 这个命令还是很好理解的， HEAD --表示当前文件的状态。 test.txt 表示版本库里该文件的最新版本
+diff --git a/test.txt b/test.txt
+index b3b76fa..43455ff 100644
+--- a/test.txt
++++ b/test.txt
+@@ -3,3 +3,4 @@ hehe
+ add the new line.
+ book
+ Tue Nov 17 21:36:53 CST 2015
++add the second new line	表示第二次修改新加的行。
+
+
+那么如何提交第二次修改呢？
+你可以在第一次提交之后，第二次一次add并commit。
+也可以直接git commit file该文件，就可以一次性提交。
+
+
+
+3,撤销文件的修改
+分两种情况。
+1种是我们已经对文件或者代码进行了修改，但是我们现在不想修改了。这种情况下使用git checkout -- file来进行撤销修改
+第2种情况是我们已经对文件进行了修改，并且已经add到暂存区了。这种情况下我们使用git reset HEAD file
+
+还有就是文件的撤销，这个前面也说过
+有 "时光穿梭机"
+你可以回到前面的版本，也可以向后跑。
+
+
+[root@test1 git]# cat test.txt 
+gjkdhr
+hehe
+add the new line.
+book
+Tue Nov 17 21:36:53 CST 2015
+
+我们在文件最后添加一行新的内容
+add the second new line
+[root@test1 git]# echo "add the second new line" >> test.txt 
+
+现在我不想修改了，我想删除最后一行。
+如果你觉得直接编辑文件去掉最后一行的话，觉得很爽。但是
+我现在给你个几千行的代码或者文件，对，你可能已经忘了自己在那些行进行了修改。
+而且有的文件修改的地方可能很多，如果让你手动撤销的话，着实麻烦。
+
+先来看看状态。
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory) 利用该命令丢弃改变，哈哈
+#
+#	modified:   test.txt
+
+看见了吗？已经提示你撤销的命令了。
+[root@test1 git]# git checkout -- test.txt 
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+这就撤销成功了。
+
+
+
+还有一种情况是，你现在已经add该文件到缓存区，但是我还是想撤销。
+这样行吗？当然，后悔药还是有的。
+加入现在我已经add了该文件
+[root@test1 git]# git add test.txt 
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)	就是将该文件从暂存区扔回到工作目录。
+#
+#	modified:   test.txt
+#
+
+看见了吗？有提醒你，如何撤销。
+[root@test1 git]# git reset HEAD test.txt 
+Unstaged changes after reset:
+M	test.txt
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   test.txt
+#
+
+扔回到活动目录，就很容易了
+checkout --就撤销了。
+[root@test1 git]# git checkout -- test.txt 
+[root@test1 git]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+
+
+
+
