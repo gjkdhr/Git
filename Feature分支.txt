@@ -3,8 +3,36 @@
 每个功能分区如果完成了代码，并且通过测试，就可以到master主分支进行合并
 
 现在比如你接到一个新的功能需要开发。
-当你开发好这个功能之后，项目负责人说不想加入这个功能了。
+当你开发好这个功能并add和commit之后，项目负责人突然说不想加入这个功能了。
 那么只有删除这个分支，
 
 前面已经讲过删除分支的操作。
 git branch -d branch
+[root@test1 git]# git branch -d function
+error: The branch 'function' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D function'.
+
+卧槽，删除不掉，提示这个分支没有进行合并。
+但是我现在不想合并，那只好强行删除了。
+[root@test1 git]# git branch -D function
+Deleted branch function (was f480523).
+
+
+
+另外我们在新克隆的库中，库中默认只有主分支master。
+如果想获取其他分支，需要自行进行关联下载。
+获取github或者git服务器上项目的所有分支
+[root@test1 git]# git branch -v
+* master ade5e76 [ahead 1] create feature branch
+[root@test1 git]# git branch -va
+* master                 ade5e76 [ahead 1] create feature branch
+  remotes/origin/HEAD    -> origin/master
+  remotes/origin/bug-110 bdfafd4 fix the bug
+  remotes/origin/feature 6d52d6c create git_bug_branch method
+  remotes/origin/master  51fadcb create git_bug branch
+其中 -v 参数 是显示本地活动目录当前的所有分支，
+    -a  显示github或者git服务器远端的分支。
+
+如果要想把远程的分支与本地的分支关联起来，可以使用
+git 
+
