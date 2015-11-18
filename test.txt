@@ -1,8 +1,8 @@
 gjkdhr
 add the master branch
 book
+qu fix the master bug
 hehe
-Tue Nov 17 21:36:53 CST 2015
 second add the branch develop
-first add the branch develop
+Tue Nov 17 21:36:53 CST 2015
 this is feature branch add the line
