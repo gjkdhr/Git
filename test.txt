@@ -4,3 +4,4 @@ second add the branch develop
 
 #iInitiatorName=iqn.1994-05.com.redhat:999e8620abca
 InitiatorName=iqn.2015-09.com.zbit-initiator:initiator
+>>>>>>> bug-110
