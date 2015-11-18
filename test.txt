@@ -1,8 +1,6 @@
 gjkdhr
 gjkdhr@162.com
-book
-this is the bug-110 add the line
-Tue Nov 17 21:36:53 CST 2015
 second add the branch develop
->>>>>>>>>>>>>>
-this is feature branch add the line
+
+#iInitiatorName=iqn.1994-05.com.redhat:999e8620abca
+InitiatorName=iqn.2015-09.com.zbit-initiator:initiator
