@@ -1,1 +1,46 @@
+通常我们合并的时候，都是在主分支master下直接用
+git merge branch进行合并的。
+但是这样有一个问题，合并分支时，git默认用
+fast forward模式，但是这种模式下，删除分支后，会丢掉分支信息。
+因为这样的合并只会显示
+
+mastera01e Merge branch 'master' of github.com:gjkdhr/git
+|\  
+| * 98d60bc create and merge branch
+| *   aad0dc9 merge the modify
+| |\  
+| | * 7b371c1 xiugai
+| * | db41323 add the new branch
+......
+....
+..
+
+你并不知道分支和那个分支合并了，在这次合并的时候具体做了什么。没法添加commit描述。
+
+
+
+如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，
+这样，从分支历史上就可以看出分支信息。
+在git合并的时候，我们添加 --no-ff选项用于合并，这样就可以自定义commit描述信息了。
+
+假设现在分支feature对文件代码都进行修改，
+在合并的时候，我们看看。会不会出现相关信息。
+[root@test1 git]# git merge --no-ff -m "use --no-ff option" feature
+Merge made by recursive.
+ test.txt |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+查看日志
+[root@test1 git]# git log --pretty=oneline --graph --abbrev-commit 
+*   f16d059 use --no-ff option	确实是我们定义的分支。
+|\  
+| * a16a4e9 add the feature branch
+| * 0458206 add the feature line
+|/  
+*   eeaa01e Merge branch 'master' of github.com:gjkdhr/git
+
+
+
+
+
 
