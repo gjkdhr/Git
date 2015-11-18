@@ -49,7 +49,45 @@ ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAy4tN8PNuksC+aEs9dqVKnALGId/wVLlItg55TdLI7qVL
 
 
 
+2,创建一个github仓库。
+现在我们需要将远程主机跟你的github账号关联起来了。
+但是远程主机下有活动目录，我们需要在github上创建一个仓库用来跟
+远程主机的活动目录进行同步。
+这样的话，以后无论你在家还是办公点，你都可以将它从github上pull或者clone下来。
+当你进行了相关修改之后，再通过push推上去。
+
+登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库。
+在Repository name填入仓库名，这个名字得跟你的远程主机的活动目录相同才能推送成功。
+其他保持默认设置，点击“Create repository”按钮，就成功地创建了一个新的Git仓库。
 
 
+在GitHub上的这个learngit仓库还是空的，在创建完仓库时，git会提示我们，
+如何向该仓库添加文件或代码。
+GitHub告诉我们，可以从这个仓库克隆出新的仓库，也可以把一个已有的本地仓库与之关联。
+那我们还是选择关联吧，就是将你的远程主机与github关联起来。
+ssh -T git@github.com
+将git@github.com主机解析信息添加到.ssh/known_hosts中用于解析。
 
+现在在远程主机需要关联的活动目录下。执行
+git remote add origin git@github.com:gjkdhr/git.git
+
+由于远程主机是空的，第一次推送master分支时，需要加上-u参数。
+git不但会把远程主机的master分支与github上的master分支关联起来。
+还会把本地的master分支内容推送到github上的master分支上，
+
+现在就可以进行提交了
+git push origin master
+
+提交完成后，刷新github主页，就可以看到远程主机活动目录所推送的文件了。
+
+
+3，从github上克隆
+假设我们现在要进行一个新的项目，我们可以在github上新创建一个项目仓库
+github会提示我们要创建一个READM.md的解释说明文件。
+我们可以在这个文件说明该项目的一些基本情况。
+
+创建仓库完成之后，我们可以将这个仓库克隆到远程主机上，
+一般情况下，打开某个项目仓库，页面会有提示，
+用ssh克隆的链接也会出现,我们可以复制克隆链接，将github仓库克隆到远程主机。
+git clone git@github:gjkdhr/repolist.git
 
