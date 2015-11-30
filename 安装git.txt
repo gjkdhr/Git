@@ -1,0 +1,35 @@
+在安装好系统之后，初始化git的时候会出错。
+比如我们当前主机没有将ssh的公钥id_rsa.pub加入到
+github账户中。
+
+在我们首次安装git并clone别人的内容时，会出错。Permission denied(公钥)
+[root@test1 ~]# git clone git@github.com:gjkdhr/Dockerfile.git
+Initialized empty Git repository in /root/Dockerfile/.git/
+The authenticity of host 'github.com (192.30.252.131)' can't be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.252.131' (RSA) to the list of known hosts.
+Permission denied (publickey).
+fatal: The remote end hung up unexpectedly
+
+
+
+甚至根本就连不上，因为没有公钥。
+[root@test1 ~]# ssh -T git@github.com
+The authenticity of host 'github.com (192.30.252.130)' can't be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.252.130' (RSA) to the list of known hosts.
+Permission denied (publickey).
+
+
+通过git下的file文件，里面的“ GIT远程仓库.txt “生成公钥，
+并添加到github的账号中。就可以clone了。
+[root@test1 ~]# git clone git@github.com:gjkdhr/Dockerfile.git
+Initialized empty Git repository in /root/Dockerfile/.git/
+remote: Counting objects: 63, done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 63 (delta 15), reused 61 (delta 13), pack-reused 0
+Receiving objects: 100% (63/63), 13.48 KiB, done.
+Resolving deltas: 100% (15/15), done.
+
